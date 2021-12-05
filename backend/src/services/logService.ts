@@ -77,3 +77,25 @@ export const getUserRouteLogs = async (
 
   return routes?.Items as Log[];
 };
+
+export const getUserWallLogs = async (
+  wallId: string,
+  userId: string
+): Promise<Log[]> => {
+  const params = {
+    TableName: String(process.env.tableName),
+    KeyConditionExpression: "#hk = :hk AND begins_with(#sk, :sk)",
+    ExpressionAttributeNames: {
+      "#hk": "hk",
+      "#sk": "sk",
+    },
+    ExpressionAttributeValues: {
+      ":hk": userId,
+      ":sk": `userRouteLog#wall#${wallId}#`,
+    },
+  };
+
+  const routes = await dynamoDb.query(params).promise();
+
+  return routes?.Items as Log[];
+};

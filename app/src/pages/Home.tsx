@@ -21,7 +21,6 @@ const Home = () => {
       try {
         setLoading(true);
         const { walls }: { walls: Wall[] } = await getWalls();
-        console.log(walls);
         setWalls(walls);
 
         walls.forEach((wall) =>
@@ -37,11 +36,6 @@ const Home = () => {
       }
     })();
   }, []);
-
-  const getImageUrlFromKey = async (imageKey: string) => {
-    const imageUrl = await Storage.get(imageKey);
-    return imageUrl;
-  };
 
   return (
     <>

@@ -78,12 +78,12 @@ export const getRouteForWall = async (wallId: string): Promise<Route[]> => {
   return routes?.Items as Route[];
 };
 
-export const incrementLogCount = (routeId: string) => {
+export const incrementLogCount = (wallId: string, routeId: string) => {
   const params = {
     TableName: String(process.env.tableName),
     Key: {
+      hk: wallId,
       sk: routeId,
-      model: "route",
     },
     UpdateExpression: "set #logCount = #logCount + :inc",
     ExpressionAttributeNames: {
@@ -97,12 +97,12 @@ export const incrementLogCount = (routeId: string) => {
   return dynamoDb.update(params).promise();
 };
 
-export const decrementLogCount = (routeId: string) => {
+export const decrementLogCount = (wallId: string, routeId: string) => {
   const params = {
     TableName: String(process.env.tableName),
     Key: {
+      hk: wallId,
       sk: routeId,
-      model: "route",
     },
     UpdateExpression: "set #logCount = #logCount - :inc",
     ExpressionAttributeNames: {

@@ -1,6 +1,6 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2 } from "aws-lambda";
 import { getRouteById, getRouteForWall } from "../../services/routeService";
-import { getUserRouteLogs } from "../../services/logService";
+import { getUserRouteLogs, getUserWallLogs } from "../../services/logService";
 
 export const handler: APIGatewayProxyHandlerV2 = async (
   event: APIGatewayProxyEventV2
@@ -27,6 +27,12 @@ export const handler: APIGatewayProxyHandlerV2 = async (
       };
     } else {
       const routes = await getRouteForWall(wallId);
+      const userLogs = await getUserWallLogs(wallId, userId);
+
+      const routesAndLogs = routes.map(route => ({
+        ...route,
+        userLogs: userLogs.filter(userLog => userLog.routeId === route.routeId)
+      }))
 
       return {
         statusCode: 200,
@@ -35,7 +41,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Credentials": true,
         },
-        body: JSON.stringify({ routes }),
+        body: JSON.stringify({ routes: routesAndLogs }),
       };
     }
   } catch (error) {

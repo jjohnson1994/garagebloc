@@ -105,6 +105,44 @@ export const getUserWalls = async (userId: string): Promise<Wall[]> => {
   return walls as Wall[];
 };
 
+export const incrementLogCount = (wallId: string) => {
+  const params = {
+    TableName: String(process.env.tableName),
+    Key: {
+      hk: wallId,
+      sk: "metadata",
+    },
+    UpdateExpression: "set #logCount = #logCount + :inc",
+    ExpressionAttributeNames: {
+      "#logCount": "logCount",
+    },
+    ExpressionAttributeValues: {
+      ":inc": 1,
+    },
+  };
+
+  return dynamoDb.update(params).promise();
+};
+
+export const decrementLogCount = (wallId: string) => {
+  const params = {
+    TableName: String(process.env.tableName),
+    Key: {
+      hk: wallId,
+      sk: "metadata",
+    },
+    UpdateExpression: "set #logCount = #logCount - :inc",
+    ExpressionAttributeNames: {
+      "#logCount": "logCount",
+    },
+    ExpressionAttributeValues: {
+      ":inc": 1,
+    },
+  };
+
+  return dynamoDb.update(params).promise();
+};
+
 export const incrementMemberCount = (wallId: string) => {
   const params = {
     TableName: String(process.env.tableName),

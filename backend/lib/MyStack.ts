@@ -83,6 +83,30 @@ export default class MyStack extends sst.Stack {
       ],
     });
 
+    const topicRouteLogOnInsert = new sst.Topic(this, "routeLogOnInsert", {
+      subscribers: [
+        new sst.Function(this, "routeLogOnInsertHandler", {
+          handler: "src/events/routeLog/routeLogOnInsert.handler",
+          environment: {
+            tableName: table.dynamodbTable.tableName,
+          },
+          permissions: [table],
+        }),
+      ],
+    });
+
+    const topicRouteLogOnRemove = new sst.Topic(this, "routeLogOnRemove", {
+      subscribers: [
+        new sst.Function(this, "routeLogOnRemoveHandler", {
+          handler: "src/events/routeLog/routeLogOnRemove.handler",
+          environment: {
+            tableName: table.dynamodbTable.tableName,
+          },
+          permissions: [table],
+        }),
+      ],
+    });
+
     const dynamoConsumer = new sst.Function(
       this,
       "climbing-topos-dynamodb-stream-consumer-2",
@@ -93,12 +117,16 @@ export default class MyStack extends sst.Stack {
           TOPIC_ARN_WALL_REMOVE: topicWallOnRemove.snsTopic.topicArn,
           TOPIC_ARN_USERWALL_INSERT: topicUserWallOnInsert.snsTopic.topicArn,
           TOPIC_ARN_USERWALL_REMOVE: topicUserWallOnRemove.snsTopic.topicArn,
+          TOPIC_ARN_ROUTELOG_INSERT: topicRouteLogOnInsert.snsTopic.topicArn,
+          TOPIC_ARN_ROUTELOG_REMOVE: topicRouteLogOnRemove.snsTopic.topicArn,
         },
         permissions: [
           topicWallOnInsert,
           topicWallOnRemove,
           topicUserWallOnInsert,
           topicUserWallOnRemove,
+          topicRouteLogOnInsert,
+          topicRouteLogOnRemove,
         ],
       }
     );
