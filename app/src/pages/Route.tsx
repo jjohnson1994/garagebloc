@@ -10,7 +10,7 @@ import Button from "../elements/Button";
 import RouteDrawing from "../components/RouteDrawing";
 
 const RouteView = () => {
-  const { wallId, routeId } = useParams<{ wallId: string, routeId: string }>();
+  const { wallId, routeId } = useParams<{ wallId: string; routeId: string }>();
   const [wall, setWall] = useState<Wall>();
   const [route, setRoute] = useState<Route>();
   const [imageUrl, setImageUrl] = useState<string>();
@@ -64,20 +64,25 @@ const RouteView = () => {
       {!loading && wall && route && imageUrl && (
         <>
           <section className="section">
-            <div className="container">
+            <div className="block container">
               <div className="columns">
                 <div className="column">
-                  <h1 className="title">{ route.title }</h1>
+                  <h1 className="title">{route.title}</h1>
                   <div className="tags">
-                    <div className="tag">Grade { route.grade }</div>
-                    <div className="tag">Logs { route.logCount }</div>
+                    {route.userLogs && (
+                      <div className="tag is-success">
+                        <i className="fas fa-check mr-1"></i>Done
+                      </div>
+                    )}
+                    <div className="tag">Grade {route.grade}</div>
+                    <div className="tag">Logs {route.logCount}</div>
                   </div>
-                  <p>{ route.description }</p>
+                  <p>{route.description}</p>
                 </div>
                 <div className="column">
                   <div className="buttons">
                     <Link to={`/wall/${wallId}/route/${routeId}/add-to-log`}>
-                      { route.userLogs ? (
+                      {route.userLogs ? (
                         <Button icon="fas fa-check">Log Repeat</Button>
                       ) : (
                         <Button icon="fas fa-check">Log Ascent</Button>
@@ -87,10 +92,33 @@ const RouteView = () => {
                 </div>
               </div>
             </div>
-          </section>
-          <section className="section">
-            <div className="container">
-              <RouteDrawing backgroundImageUrl={ imageUrl } drawing={ route.drawing } />
+            <div className="block container">
+              <RouteDrawing
+                backgroundImageUrl={imageUrl}
+                drawing={route.drawing}
+              />
+            </div>
+            <div className="block container">
+              <table className="table is-fullwidth">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Comments</th>
+                    <th>Grade</th>
+                    <th>Rating</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {route.userLogs.map((log) => (
+                    <tr>
+                      <td>{log.createdAt}</td>
+                      <td>{log.comments}</td>
+                      <td>{log.suggestedGrade}</td>
+                      <td>{log.rating}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </section>
         </>

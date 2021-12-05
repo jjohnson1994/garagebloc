@@ -8,9 +8,11 @@ import { popupError } from "../helpers/alerts";
 import Box from "../elements/Box";
 import LoadingSpinner from "../components/LoadingSpinner";
 import WallTitleTags from "../components/WallTitleTags";
+import { Storage } from "aws-amplify";
 
 const Home = () => {
   const [walls, setWalls] = useState<Wall[]>([]);
+  const [wallImageUrls, setWallImageUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -18,9 +20,15 @@ const Home = () => {
     (async () => {
       try {
         setLoading(true);
-        const { walls } = await getWalls();
+        const { walls }: { walls: Wall[] } = await getWalls();
         console.log(walls);
         setWalls(walls);
+
+        walls.forEach((wall) =>
+          Storage.get(wall.imageKey).then((imageUrl) =>
+            setWallImageUrls({ ...wallImageUrls, [wall.wallId]: imageUrl })
+          )
+        );
       } catch (error) {
         console.error(error);
         popupError("Somethings gone wrong, try again");
@@ -29,6 +37,11 @@ const Home = () => {
       }
     })();
   }, []);
+
+  const getImageUrlFromKey = async (imageKey: string) => {
+    const imageUrl = await Storage.get(imageKey);
+    return imageUrl;
+  };
 
   return (
     <>
@@ -70,16 +83,31 @@ const Home = () => {
           {loading && !walls.length && <LoadingSpinner />}
           {walls?.map((wall) => (
             <>
-              <Link to={`/wall/${wall.wallId}`} key={ wall.wallId }>
+              <Link to={`/wall/${wall.wallId}`} key={wall.wallId}>
                 <Box>
-                  <p className="subtitle is-5">
-                    <strong>{wall.wallName}</strong>
-                  </p>
-                  <WallTitleTags
-                    routeCount={ wall.routeCount }
-                    logCount={ wall.logCount }
-                    memberCount={ wall.memberCount }
-                  />
+                  <article className="media">
+                    <div className="media-left">
+                      <figure className="image is-128x128">
+                        <img
+                          style={ { width: "100%", height: "100%", objectFit: "cover" }}
+                          src={ wallImageUrls[wall.wallId] }
+                          alt={wall.wallName}
+                        />
+                      </figure>
+                    </div>
+                    <div className="media-content">
+                      <div className="content">
+                        <p className="subtitle is-5">
+                          <strong>{wall.wallName}</strong>
+                        </p>
+                        <WallTitleTags
+                          routeCount={wall.routeCount}
+                          logCount={wall.logCount}
+                          memberCount={wall.memberCount}
+                        />
+                      </div>
+                    </div>
+                  </article>
                 </Box>
               </Link>
             </>

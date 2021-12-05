@@ -50,32 +50,27 @@ const WallView = () => {
       )}
       {!loading && wall && (
         <section className="section">
-          <div className="columns is-gapless mb-0">
-            <div className="column">
-              <img src={imageUrl} alt={wall?.wallName} />
-            </div>
-            <div className="column">
-              <section className="section">
-                <div className="container">
-                    <>
-                      <h1 className="title">{wall.wallName}</h1>
-                      <WallTitleTags
-                        routeCount={wall.routeCount}
-                        logCount={wall.logCount}
-                        memberCount={wall.memberCount}
-                      />
-                      <div className="buttons">
-                        <Link to={`/wall/${wall.wallId}/create-route`}>
-                          <Button icon="fas fa-plus">Add Route</Button>
-                        </Link>
-                      </div>
-                    </>
+          <div className="block container">
+            <div className="columns">
+              <div className="column">
+                <img src={imageUrl} alt={wall?.wallName} />
+              </div>
+              <div className="column">
+                <h1 className="title">{wall.wallName}</h1>
+                <WallTitleTags
+                  routeCount={wall.routeCount}
+                  logCount={wall.logCount}
+                  memberCount={wall.memberCount}
+                />
+                <div className="buttons">
+                  <Link to={`/wall/${wall.wallId}/create-route`}>
+                    <Button icon="fas fa-plus">Add Route</Button>
+                  </Link>
                 </div>
-              </section>
+              </div>
             </div>
           </div>
-          <hr />
-          <div className="container">
+          <div className="block container">
             <h1 className="title">Routes</h1>
             {routes?.map((route) => (
               <Link to={`/wall/${wall?.wallId}/route/${route.routeId}`} key={route.routeId} className="pb-2">
