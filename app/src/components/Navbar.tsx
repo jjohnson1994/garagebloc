@@ -1,3 +1,4 @@
+import {useState} from "react";
 import { Link } from "react-router-dom";
 import { appTitle } from "../config.json";
 import {useAppContext} from "../context/appContext";
@@ -5,6 +6,15 @@ import Button, {Color} from "../elements/Button";
 
 const NarBar = () => {
   const { isAuthenticated } = useAppContext();
+  const [navBarMenuClass, setNavBarMenuClass] = useState("");
+
+  const btnBurgerMenuOnClick = () => {
+    if (navBarMenuClass === "is-active") {
+      setNavBarMenuClass("");
+    } else {
+      setNavBarMenuClass("is-active");
+    }
+  };
 
   return (
     <nav
@@ -19,9 +29,25 @@ const NarBar = () => {
         >
           {appTitle}
         </a>
+
+        <a
+          className="navbar-burger burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarBasicExample"
+          onClick={ btnBurgerMenuOnClick }
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
       </div>
 
-      <div id="navbarBasicExample" className="navbar-menu">
+      <div
+        id="navbarBasicExample"
+        className={`navbar-menu ${navBarMenuClass}`}
+        onClick={ btnBurgerMenuOnClick }
+      >
         <div className="navbar-end">
           <div className="navbar-item">
             {isAuthenticated ? (
