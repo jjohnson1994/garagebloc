@@ -1,2 +1,2 @@
-# Super Board
-An app for logging and tracking board climbs
+# GarageBloc
+An app for logging board climbs

@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "GarageBloc",
+  "name": "The app for logging board climbs",
   "icons": [
     {
       "src": "favicon.ico",
