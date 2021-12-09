@@ -4,8 +4,8 @@ import { getWall, getUserWalls } from "../../services/wallService";
 export const handler: APIGatewayProxyHandlerV2 = async (
   event: APIGatewayProxyEventV2
 ) => {
-  // @ts-ignore
-  const userId = event.requestContext.authorizer?.iam.cognitoIdentity.identityId
+  const userId =
+    (event.requestContext.authorizer as any)?.iam.cognitoIdentity.identityId;
 
   const { wallId } = event.queryStringParameters || {} as any
 

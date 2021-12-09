@@ -10,8 +10,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (
   const eventBody = JSON.parse(`${event.body}`) as CreateRouteForm;
   const { wallId } = event.pathParameters as any;
   const userId =
-    // @ts-ignore
-    event.requestContext.authorizer?.iam.cognitoIdentity.identityId;
+    (event.requestContext.authorizer as any)?.iam.cognitoIdentity.identityId;
 
   try {
     await validateDataAgainstSchema(eventBody, NewRouteFormSchema);

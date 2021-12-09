@@ -28,8 +28,8 @@ export const handler: APIGatewayProxyHandlerV2 = async (
   event: APIGatewayProxyEventV2
 ) => {
   const eventBody = JSON.parse(`${event.body}`) as CreateWallRequest;
-  // @ts-ignore
-  const userId = event.requestContext.authorizer?.iam.cognitoIdentity.identityId
+  const userId =
+    (event.requestContext.authorizer as any)?.iam.cognitoIdentity.identityId;
 
   try {
     await validateDataAgainstSchema(eventBody, NewWallRequestSchema);

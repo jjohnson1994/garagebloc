@@ -3,13 +3,6 @@ import * as sst from "@serverless-stack/resources";
 import { CorsHttpMethod } from "@aws-cdk/aws-apigatewayv2";
 import { BucketAccessControl, HttpMethods, CorsRule } from "@aws-cdk/aws-s3";
 
-const publicFunction = (handlerPath: string) => {
-  return {
-    function: handlerPath,
-    authorizationType: sst.ApiAuthorizationType.NONE,
-  };
-};
-
 export default class MyStack extends sst.Stack {
   constructor(scope: sst.App, id: string, props?: sst.StackProps) {
     super(scope, id, props);

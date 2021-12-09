@@ -6,8 +6,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (
   event: APIGatewayProxyEventV2
 ) => {
   const userId =
-    // @ts-ignore
-    event.requestContext.authorizer?.iam.cognitoIdentity.identityId;
+    (event.requestContext.authorizer as any)?.iam.cognitoIdentity.identityId;
 
   const { wallId, routeId } = event.queryStringParameters || ({} as any);
 
