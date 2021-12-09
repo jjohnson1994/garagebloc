@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button, { ButtonType, Color } from "../elements/Button";
-import Form from "../elements/Form";
+import Form, {AutoComplete} from "../elements/Form";
 import Input, { InputType } from "../elements/Input";
 import { yup } from "core/schemas";
 import { popupError } from "../helpers/alerts";
@@ -70,7 +70,7 @@ const Signup = () => {
     <section className="section">
       <div className="container">
         <h1 className="title">Signup</h1>
-        <Form onSubmit={handleSubmit(formOnSubmit)}>
+        <Form onSubmit={handleSubmit(formOnSubmit)} autoComplete={ AutoComplete.on }>
           <Input
             label="Username"
             {...register("username")}

@@ -7,7 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useHistory, useParams } from "react-router-dom";
 import { createLog } from "../api/log";
 import Button, { ButtonType, Color } from "../elements/Button";
-import Form from "../elements/Form";
+import Form, {AutoComplete} from "../elements/Form";
 import Select from "../elements/Select";
 import TextArea from "../elements/TextArea";
 import { popupError, popupSuccess } from "../helpers/alerts";
@@ -51,7 +51,7 @@ const AddRouteToLog = () => {
   return (
     <section className="section">
       <div className="container">
-        <Form onSubmit={handleSubmit(formOnSubmit)}>
+        <Form onSubmit={handleSubmit(formOnSubmit)} autoComplete={ AutoComplete.off }>
           <Select
             label="Rating"
             {...register("rating")}

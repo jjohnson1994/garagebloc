@@ -1,16 +1,19 @@
-import { FormEventHandler, FunctionComponent } from "react"
+import { FormEventHandler, FunctionComponent } from "react";
 
-interface FormProps {
-  onSubmit: FormEventHandler<HTMLFormElement>
+export enum AutoComplete {
+  on = "on",
+  off = "off",
 }
 
-const Form: FunctionComponent<FormProps> = ({ children, onSubmit }) => (
-  <form
-    onSubmit={ onSubmit }
-    autoComplete="off"
-  >
-    { children }
-  </form>
-)
+interface FormProps {
+  autoComplete: AutoComplete;
+  onSubmit: FormEventHandler<HTMLFormElement>;
+}
 
-export default Form
+const Form: FunctionComponent<FormProps> = ({ children, onSubmit, autoComplete }) => (
+  <form onSubmit={onSubmit} autoComplete={ autoComplete }>
+    {children}
+  </form>
+);
+
+export default Form;

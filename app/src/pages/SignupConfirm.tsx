@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button, { ButtonType, Color } from "../elements/Button";
-import Form from "../elements/Form";
+import Form, {AutoComplete} from "../elements/Form";
 import Input from "../elements/Input";
 import { yup } from "core/schemas";
 import { popupError, popupSuccess } from "../helpers/alerts";
@@ -30,7 +30,6 @@ const SignupConfirm = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue
   } = useForm<SignupConfirmForm>({
     resolver: yupResolver(SignupFormConfirmSchema),
   });
@@ -63,7 +62,7 @@ const SignupConfirm = () => {
         <h1 className="title">Verify Account</h1>
         <p>A confirmation code has been sent to your email addres <b>{ location.state.email }</b></p>
         <br/>
-        <Form onSubmit={handleSubmit(formOnSubmit)}>
+        <Form onSubmit={handleSubmit(formOnSubmit)} autoComplete={ AutoComplete.off }>
           <Input
             label="Confirmation Code"
             {...register("confirmationCode")}
