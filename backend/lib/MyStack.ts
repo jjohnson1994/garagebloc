@@ -14,7 +14,7 @@ export default class MyStack extends sst.Stack {
   constructor(scope: sst.App, id: string, props?: sst.StackProps) {
     super(scope, id, props);
 
-    const table = new sst.Table(this, "the-board-db", {
+    const table = new sst.Table(this, "garagebloc-db", {
       fields: {
         hk: sst.TableFieldType.STRING,
         sk: sst.TableFieldType.STRING,
@@ -109,7 +109,7 @@ export default class MyStack extends sst.Stack {
 
     const dynamoConsumer = new sst.Function(
       this,
-      "climbing-topos-dynamodb-stream-consumer-2",
+      "garagebloc-dynamodb-stream-consumer",
       {
         handler: "src/events/dynamodb/stream.handler",
         environment: {
@@ -135,7 +135,7 @@ export default class MyStack extends sst.Stack {
 
     const imageBucket = new sst.Bucket(
       this,
-      `super-board-images-${process.env.NODE_ENV}`,
+      `garagebloc-images-${process.env.NODE_ENV}`,
       {
         s3Bucket: {
           accessControl: BucketAccessControl.PUBLIC_READ,
@@ -145,7 +145,7 @@ export default class MyStack extends sst.Stack {
               allowedMethods: [HttpMethods.PUT],
               allowedOrigins: [
                 "http://localhost:3000",
-                "https://climbingtopos.com",
+                "https://garagebloc.com",
               ],
               maxAge: 30,
             },
@@ -154,7 +154,7 @@ export default class MyStack extends sst.Stack {
       }
     );
 
-    const api = new sst.Api(this, "the-board-api", {
+    const api = new sst.Api(this, "garagebloc-api", {
       cors: {
         allowMethods: [CorsHttpMethod.ANY],
         allowHeaders: [
@@ -167,7 +167,7 @@ export default class MyStack extends sst.Stack {
         allowOrigins:
           process.env.NODE_ENV === "dev"
             ? ["http://localhost:3000"]
-            : ["https://super-board.com"],
+            : ["https://garagebloc.com"],
       },
       defaultAuthorizationType: sst.ApiAuthorizationType.AWS_IAM,
       defaultFunctionProps: {
@@ -187,7 +187,7 @@ export default class MyStack extends sst.Stack {
 
     api.attachPermissions([table, imageBucket]);
 
-    const auth = new sst.Auth(this, "super-board-auth", {
+    const auth = new sst.Auth(this, "garagebloc-auth", {
       cognito: {
         userPool: {
           passwordPolicy: {

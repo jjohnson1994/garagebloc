@@ -6,5 +6,5 @@ export default function main(app: sst.App): void {
     runtime: 'nodejs12.x'
   })
 
-  new MyStack(app, 'the-board')
+  new MyStack(app, 'garagebloc')
 }
