@@ -47,7 +47,7 @@ jobs:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
           REACT_APP_REGION: ${{ secrets.REACT_APP_REGION }}
           REACT_APP_IDENTITY_POOL_ID: ${{ secrets.REACT_APP_IDENTITY_POOL_ID }}
-          REACT_APP_USER_POOL_CLIENT_ID: ${ secrets.REACT_APP_USER_POOL_CLIENT_ID }
+          REACT_APP_USER_POOL_CLIENT_ID: ${{ secrets.REACT_APP_USER_POOL_CLIENT_ID }}
           REACT_APP_USER_POOL_ID: ${{ secrets.REACT_APP_USER_POOL_ID }}
           REACT_APP_IMAGE_BUCKET: ${{ secrets.REACT_APP_IMAGE_BUCKET }}
       - name: Deploy app build to S3 bucket
