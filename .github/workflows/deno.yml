@@ -50,6 +50,7 @@ jobs:
           REACT_APP_USER_POOL_CLIENT_ID: ${{ secrets.REACT_APP_USER_POOL_CLIENT_ID }}
           REACT_APP_USER_POOL_ID: ${{ secrets.REACT_APP_USER_POOL_ID }}
           REACT_APP_IMAGE_BUCKET: ${{ secrets.REACT_APP_IMAGE_BUCKET }}
+          REACT_APP_GTM_ID: ${{ secrets.REACT_APP_GTM_ID }}
       - name: Deploy app build to S3 bucket
         run: |
           cd app
