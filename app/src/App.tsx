@@ -1,13 +1,12 @@
+import { useEffect, useState } from "react";
 import { Auth } from "aws-amplify";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import ProtectedRoute from "./components/auth-0/ProtectedRoute";
 import CreateWall from "./pages/CreateWall";
 import Profile from "./pages/Profile";
 import Landing from "./pages/Landing";
 import NavBar from "./components/Navbar";
 import Login from "./pages/Login";
 import { AppContext } from "./context/appContext";
-import { useEffect, useState } from "react";
 import Signup from "./pages/Signup";
 import SignupConfirm from "./pages/SignupConfirm";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";

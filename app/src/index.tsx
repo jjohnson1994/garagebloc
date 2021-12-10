@@ -1,10 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import TagManager from 'react-gtm-module';
 import "tippy.js";
 import "bulma/css/bulma.min.css";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import Amplify, { Auth } from "aws-amplify";
+import Amplify from "aws-amplify";
 import App from "./App";
 
 
@@ -31,6 +32,12 @@ Amplify.configure({
     ]
   },
 });
+
+const tagManagerArgs = {
+  gtmId: `${process.env.REACT_APP_GTM_ID}`
+}
+
+TagManager.initialize(tagManagerArgs)
 
 ReactDOM.render(
   <React.StrictMode>
