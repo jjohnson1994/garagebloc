@@ -100,6 +100,30 @@ export default class MyStack extends sst.Stack {
       ],
     });
 
+    const topicRouteOnInsert = new sst.Topic(this, "routeOnInsert", {
+      subscribers: [
+        new sst.Function(this, "routeOnInsertHandler", {
+          handler: "src/events/route/routeOnInsert.handler",
+          environment: {
+            tableName: table.dynamodbTable.tableName,
+          },
+          permissions: [table],
+        }),
+      ],
+    });
+
+    const topicRouteOnRemove = new sst.Topic(this, "routeOnRemove", {
+      subscribers: [
+        new sst.Function(this, "routeOnRemoveHandler", {
+          handler: "src/events/route/routeOnRemove.handler",
+          environment: {
+            tableName: table.dynamodbTable.tableName,
+          },
+          permissions: [table],
+        }),
+      ],
+    });
+
     const dynamoConsumer = new sst.Function(
       this,
       "garagebloc-dynamodb-stream-consumer",
@@ -112,6 +136,8 @@ export default class MyStack extends sst.Stack {
           TOPIC_ARN_USERWALL_REMOVE: topicUserWallOnRemove.snsTopic.topicArn,
           TOPIC_ARN_ROUTELOG_INSERT: topicRouteLogOnInsert.snsTopic.topicArn,
           TOPIC_ARN_ROUTELOG_REMOVE: topicRouteLogOnRemove.snsTopic.topicArn,
+          TOPIC_ARN_ROUTE_INSERT: topicRouteOnInsert.snsTopic.topicArn,
+          TOPIC_ARN_ROUTE_REMOVE: topicRouteOnRemove.snsTopic.topicArn,
         },
         permissions: [
           topicWallOnInsert,
@@ -120,6 +146,8 @@ export default class MyStack extends sst.Stack {
           topicUserWallOnRemove,
           topicRouteLogOnInsert,
           topicRouteLogOnRemove,
+          topicRouteOnInsert,
+          topicRouteOnRemove,
         ],
       }
     );

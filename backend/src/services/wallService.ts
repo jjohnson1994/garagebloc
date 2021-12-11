@@ -180,3 +180,41 @@ export const decrementMemberCount = (wallId: string) => {
 
   return dynamoDb.update(params).promise();
 };
+
+export const incrementRouteCount = (wallId: string) => {
+  const params = {
+    TableName: String(process.env.tableName),
+    Key: {
+      hk: wallId,
+      sk: "metadata",
+    },
+    UpdateExpression: "set #routeCount = #routeCount + :inc",
+    ExpressionAttributeNames: {
+      "#routeCount": "routeCount",
+    },
+    ExpressionAttributeValues: {
+      ":inc": 1,
+    },
+  };
+
+  return dynamoDb.update(params).promise();
+};
+
+export const decrementRouteCount = (wallId: string) => {
+  const params = {
+    TableName: String(process.env.tableName),
+    Key: {
+      hk: wallId,
+      sk: "metadata",
+    },
+    UpdateExpression: "set #routeCount = #routeCount - :inc",
+    ExpressionAttributeNames: {
+      "#routeCount": "routeCount",
+    },
+    ExpressionAttributeValues: {
+      ":inc": 1,
+    },
+  };
+
+  return dynamoDb.update(params).promise();
+};

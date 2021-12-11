@@ -21,7 +21,7 @@ export const handler: SNSHandler = async (event: SNSEvent) => {
 
     await Promise.all(promises);
   } catch (error) {
-    console.error("Error in areaOnInsert", error);
-    throw new Error(error);
+    console.error("Error in userWallOnInsert", error);
+    throw error;
   }
 };

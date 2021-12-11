@@ -75,3 +75,41 @@ export const decrementWallCount = () => {
 
   return dynamoDb.update(params).promise();
 }
+
+export const incrementRouteCount = () => {
+  const params = {
+    TableName: String(process.env.tableName),
+    Key: {
+      hk: 'globals',
+      sk: "metadata",
+    },
+    UpdateExpression: "add #routeCount :inc",
+    ExpressionAttributeNames: {
+      "#routeCount": "routeCount",
+    },
+    ExpressionAttributeValues: {
+      ":inc": 1,
+    },
+  };
+
+  return dynamoDb.update(params).promise();
+}
+
+export const decrementRouteCount = () => {
+  const params = {
+    TableName: String(process.env.tableName),
+    Key: {
+      hk: 'globals',
+      sk: "metadata",
+    },
+    UpdateExpression: "add #routeCount :inc",
+    ExpressionAttributeNames: {
+      "#routeCount": "routeCount",
+    },
+    ExpressionAttributeValues: {
+      ":inc": -1,
+    },
+  };
+
+  return dynamoDb.update(params).promise();
+}

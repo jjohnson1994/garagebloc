@@ -7,8 +7,8 @@ export const handler: SNSHandler = async (event: SNSEvent) => {
   try {
     const promises = event.Records.flatMap((record) => {
       const message = JSON.parse(record.Sns.Message);
-      const newImage = message.dynamodb.NewImage;
-      const normalizedRow = normalizeRow<Wall>(newImage);
+      const oldImage = message.dynamodb.OldImage;
+      const normalizedRow = normalizeRow<Wall>(oldImage);
 
       const { wallId } = normalizedRow;
 
@@ -21,8 +21,8 @@ export const handler: SNSHandler = async (event: SNSEvent) => {
 
     await Promise.all(promises);
   } catch (error) {
-    console.error("Error in areaOnInsert", error);
-    throw new Error(error);
+    console.error("Error in userWallOnRemove", error);
+    throw error;
   }
 };
 

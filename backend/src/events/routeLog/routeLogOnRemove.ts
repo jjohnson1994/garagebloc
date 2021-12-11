@@ -10,8 +10,8 @@ export const handler: SNSHandler = async (event: SNSEvent) => {
   try {
     const promises = event.Records.flatMap((record) => {
       const message = JSON.parse(record.Sns.Message);
-      const newImage = message.dynamodb.NewImage;
-      const normalizedRow = normalizeRow<Log>(newImage);
+      const oldImage = message.dynamodb.OldImage;
+      const normalizedRow = normalizeRow<Log>(oldImage);
 
       const { wallId, routeId, userId } = normalizedRow;
 

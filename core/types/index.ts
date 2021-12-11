@@ -37,6 +37,7 @@ export interface Route extends CreateRouteForm {
   userLogs: Log[];
   createdAt: string;
   updatedAt: string;
+  createdBy: string;
 }
 
 export interface LogRouteForm {

@@ -1,4 +1,4 @@
-import { CreateRouteForm, CreateWallRequest, Route } from "core/types";
+import { CreateRouteForm, Route } from "core/types";
 import { DateTime } from "luxon";
 import { v4 as uuidv4 } from "uuid";
 
