@@ -15,11 +15,11 @@ export interface Wall extends CreateWallRequest {
   wallId: string;
   logCount: number;
   routeCount: number;
-  drawing: WallDrawing;
   memberCount: number;
   createdAt: string;
   updatedAt: string;
   createdBy: string;
+  drawing?: WallDrawing;
 }
 
 export interface CreateRouteForm {

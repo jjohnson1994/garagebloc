@@ -63,9 +63,11 @@ const WallView = () => {
                   memberCount={wall.memberCount}
                 />
                 <div className="buttons">
-                  <Link to={`/wall/${wall.wallId}/create-route`}>
-                    <Button icon="fas fa-plus">Add Route</Button>
-                  </Link>
+                  { wall.drawing && (
+                    <Link to={`/wall/${wall.wallId}/create-route`}>
+                      <Button icon="fas fa-plus">Add Route</Button>
+                    </Link>
+                  )}
                   <Link to={`/wall/${wall.wallId}/setup`}>
                     <Button icon="fas fa-plus">Setup</Button>
                   </Link>

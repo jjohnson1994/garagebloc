@@ -78,7 +78,7 @@ const Home = () => {
           <hr />
           {loading && !walls.length && <LoadingSpinner />}
           {walls?.map((wall) => (
-            <Link to={`/wall/${wall.wallId}`} key={wall.wallId}>
+            <Link to={`/wall/${wall.wallId}`} key={wall.wallId} className="pb-2">
               <Box>
                 <article className="media">
                   <div className="media-left">
