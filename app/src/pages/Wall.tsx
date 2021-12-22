@@ -82,7 +82,7 @@ const WallView = () => {
                     <strong>{route.title}</strong>
                   </p>
                   <div className="tags">
-                    { route.userLogs && (
+                    { route.userLogs.length > 0 && (
                       <div className="tag is-success"><i className="fas fa-check mr-1"/>Done</div>
                     )}
                     <div className="tag">Grade {route.grade}</div>

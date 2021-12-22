@@ -40,6 +40,7 @@ const RouteView = () => {
       try {
         setLoading(true);
         const { route } = await getRoute(routeId);
+        console.log(route)
         setRoute(route);
       } catch (error) {
         console.error("Error loading route", error);
@@ -69,7 +70,7 @@ const RouteView = () => {
                 <div className="column">
                   <h1 className="title">{route.title}</h1>
                   <div className="tags">
-                    {route.userLogs && (
+                    {route.userLogs.length > 0 && (
                       <div className="tag is-success">
                         <i className="fas fa-check mr-1"></i>Done
                       </div>
@@ -82,7 +83,7 @@ const RouteView = () => {
                 <div className="column">
                   <div className="buttons">
                     <Link to={`/wall/${wallId}/route/${routeId}/add-to-log`}>
-                      {route.userLogs ? (
+                      {route.userLogs.length > 0 ? (
                         <Button icon="fas fa-check">Log Repeat</Button>
                       ) : (
                         <Button icon="fas fa-check">Log Ascent</Button>
