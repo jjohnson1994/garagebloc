@@ -63,7 +63,7 @@ const WallView = () => {
                   memberCount={wall.memberCount}
                 />
                 <div className="buttons">
-                  { wall.drawing && (
+                  {wall.drawing && (
                     <Link to={`/wall/${wall.wallId}/create-route`}>
                       <Button icon="fas fa-plus">Add Route</Button>
                     </Link>
@@ -78,17 +78,23 @@ const WallView = () => {
           <div className="block container">
             <h1 className="title">Routes</h1>
             {routes?.map((route) => (
-              <Link to={`/wall/${wall?.wallId}/route/${route.routeId}`} key={route.routeId} className="pb-2">
+              <Link
+                to={`/wall/${wall?.wallId}/route/${route.routeId}`}
+                key={route.routeId}
+              >
                 <Box>
                   <p className="subtitle is-5">
                     <strong>{route.title}</strong>
                   </p>
                   <div className="tags">
-                    { route.userLogs.length > 0 && (
-                      <div className="tag is-success"><i className="fas fa-check mr-1"/>Done</div>
+                    {route.userLogs.length > 0 && (
+                      <div className="tag is-success">
+                        <i className="fas fa-check mr-1" />
+                        Done
+                      </div>
                     )}
                     <div className="tag">Grade {route.grade}</div>
-                    <div className="tag">Logs { route.logCount }</div>
+                    <div className="tag">Logs {route.logCount}</div>
                   </div>
                 </Box>
                 <span className="mb-2"></span>

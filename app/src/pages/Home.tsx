@@ -18,18 +18,28 @@ const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("user effect");
     (async () => {
       try {
         setLoading(true);
         const { walls }: { walls: Wall[] } = await getWalls();
         setWalls(walls);
 
-        walls.forEach((wall) =>
-          Storage.get(wall.imageKey).then((imageUrl) =>
-            setWallImageUrls({ ...wallImageUrls, [wall.wallId]: imageUrl })
-          )
+        const wallImageRequests = await Promise.all(
+          walls.map(async ({ wallId, imageKey }) => {
+            const image = await Storage.get(imageKey);
+
+            return { wallId, image };
+          })
         );
+
+        const wallImages = wallImageRequests.reduce((acc, cur) => {
+          return {
+            ...acc,
+            [cur.wallId]: cur.image
+          }
+        }, {})
+
+        setWallImageUrls(wallImages);
       } catch (error) {
         console.error(error);
         popupError("Somethings gone wrong, try again");
@@ -42,7 +52,7 @@ const Home = () => {
   return (
     <>
       <section id="home" className="section">
-        <div className="container">
+        <div className="block container">
           <h1 className="title">Your Walls</h1>
 
           <Tippy
@@ -78,7 +88,10 @@ const Home = () => {
           <hr />
           {loading && !walls.length && <LoadingSpinner />}
           {walls?.map((wall) => (
-            <Link to={`/wall/${wall.wallId}`} key={wall.wallId} className="pb-2">
+            <Link
+              to={`/wall/${wall.wallId}`}
+              key={wall.wallId}
+            >
               <Box>
                 <article className="media">
                   <div className="media-left">
@@ -108,6 +121,7 @@ const Home = () => {
                   </div>
                 </article>
               </Box>
+              <span className="mb-2"></span>
             </Link>
           ))}
         </div>
