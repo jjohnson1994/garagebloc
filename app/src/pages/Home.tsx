@@ -12,7 +12,9 @@ import { Storage } from "aws-amplify";
 
 const Home = () => {
   const [walls, setWalls] = useState<Wall[]>([]);
-  const [wallImageUrls, setWallImageUrls] = useState<Record<string, string>>({});
+  const [wallImageUrls, setWallImageUrls] = useState<Record<string, string>>(
+    {}
+  );
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -76,35 +78,37 @@ const Home = () => {
           <hr />
           {loading && !walls.length && <LoadingSpinner />}
           {walls?.map((wall) => (
-            <>
-              <Link to={`/wall/${wall.wallId}`} key={wall.wallId}>
-                <Box>
-                  <article className="media">
-                    <div className="media-left">
-                      <figure className="image is-128x128">
-                        <img
-                          style={ { width: "100%", height: "100%", objectFit: "cover" }}
-                          src={ wallImageUrls[wall.wallId] }
-                          alt={wall.wallName}
-                        />
-                      </figure>
+            <Link to={`/wall/${wall.wallId}`} key={wall.wallId}>
+              <Box>
+                <article className="media">
+                  <div className="media-left">
+                    <figure className="image is-128x128">
+                      <img
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                        src={wallImageUrls[wall.wallId]}
+                        alt={wall.wallName}
+                      />
+                    </figure>
+                  </div>
+                  <div className="media-content">
+                    <div className="content">
+                      <p className="subtitle is-5">
+                        <strong>{wall.wallName}</strong>
+                      </p>
+                      <WallTitleTags
+                        routeCount={wall.routeCount}
+                        logCount={wall.logCount}
+                        memberCount={wall.memberCount}
+                      />
                     </div>
-                    <div className="media-content">
-                      <div className="content">
-                        <p className="subtitle is-5">
-                          <strong>{wall.wallName}</strong>
-                        </p>
-                        <WallTitleTags
-                          routeCount={wall.routeCount}
-                          logCount={wall.logCount}
-                          memberCount={wall.memberCount}
-                        />
-                      </div>
-                    </div>
-                  </article>
-                </Box>
-              </Link>
-            </>
+                  </div>
+                </article>
+              </Box>
+            </Link>
           ))}
         </div>
       </section>

@@ -1,3 +1,5 @@
+export const DrawingSchemaVersion = 2;
+
 export const grades = [
   '4',
   '5',
@@ -25,4 +27,19 @@ export const grades = [
   '9B+',
   '9C',
   '9C+',
+]
+
+export const holdLayouts = [
+  {
+    name: "Splatter",
+    descriptions: "Holds are placed randomly around the board"
+  },
+  {
+    name: "Symmetrical",
+    descriptions: "Holds are mirrored on each side of the board"
+  },
+  {
+    name: "Mixed",
+    descriptions: "Some holds are mirrored, some are placed randonly"
+  }
 ]

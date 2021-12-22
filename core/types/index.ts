@@ -7,7 +7,7 @@ export interface CreateWallForm {
   visibility: string;
 }
 
-export interface CreateWallRequest extends Omit<CreateWallForm, 'imageFile'> {
+export interface CreateWallRequest extends Omit<CreateWallForm, "imageFile"> {
   imageKey: string;
 }
 
@@ -15,9 +15,11 @@ export interface Wall extends CreateWallRequest {
   wallId: string;
   logCount: number;
   routeCount: number;
+  drawing: WallDrawing;
   memberCount: number;
   createdAt: string;
   updatedAt: string;
+  createdBy: string;
 }
 
 export interface CreateRouteForm {
@@ -25,9 +27,27 @@ export interface CreateRouteForm {
   description: string;
   grade: string;
   drawing: {
-    schemaVersion: 1,
-    points: [number, number][]
-  }
+    schemaVersion: number;
+    holds: Hold[];
+  };
+}
+
+export type HoldLayout = "Splatter" | "Symmetrical" | "Mixed";
+
+export type Hold = {
+  id: string;
+  points: [number, number][];
+  mirrors?: string;
+};
+
+export interface WallDrawing {
+  schemaVersion: number;
+  holds: Hold[];
+}
+
+export interface SetupWallForm {
+  holdLayout: HoldLayout;
+  drawing: WallDrawing;
 }
 
 export interface Route extends CreateRouteForm {
@@ -55,8 +75,6 @@ export interface Log extends LogRouteForm {
   updatedAt: string;
   createdBy: string;
 }
-
-
 
 export enum Visibility {
   public = "public",

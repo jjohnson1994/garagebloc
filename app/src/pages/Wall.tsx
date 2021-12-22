@@ -66,6 +66,9 @@ const WallView = () => {
                   <Link to={`/wall/${wall.wallId}/create-route`}>
                     <Button icon="fas fa-plus">Add Route</Button>
                   </Link>
+                  <Link to={`/wall/${wall.wallId}/setup`}>
+                    <Button icon="fas fa-plus">Setup</Button>
+                  </Link>
                 </div>
               </div>
             </div>

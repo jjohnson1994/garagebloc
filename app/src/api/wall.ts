@@ -1,5 +1,5 @@
 import { API } from "aws-amplify";
-import { CreateWallForm, CreateWallRequest } from "core/types";
+import { CreateWallForm, CreateWallRequest, SetupWallForm, Wall } from "core/types";
 import {uploadImage} from "./storage";
 
 export const createWall = async (newWall: CreateWallForm) => {
@@ -17,11 +17,15 @@ export const createWall = async (newWall: CreateWallForm) => {
   return API.post("super-board", "/walls", { body })
 };
 
+export const setupWall = async (wallId: string, newSetup: SetupWallForm) => {
+  return API.post("super-board", `/walls/${wallId}/setup`, { body: newSetup })
+};
+
 export const getWalls = async () => {
   return API.get("super-board", "/walls", {})
 };
 
-export const getWall = async (wallId: string) => {
+export const getWall = async (wallId: string): Promise<{ wall: Wall }> => {
   return API.get("super-board", "/walls", {
     queryStringParameters: {
       wallId

@@ -201,6 +201,7 @@ export default class MyStack extends sst.Stack {
         "GET /routes": "src/handlers/routes/get.handler",
         "GET /walls": "src/handlers/walls/get.handler",
         "POST /walls": "src/handlers/walls/post.handler",
+        "POST /walls/{wallId}/setup": "src/handlers/walls/setup/post.handler",
         "POST /walls/{wallId}/routes": "src/handlers/routes/post.handler",
         "POST /walls/{wallId}/routes/{routeId}/logs": "src/handlers/logs/post.handler",
       },

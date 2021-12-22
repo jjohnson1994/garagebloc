@@ -1,4 +1,4 @@
-import { CreateWallRequest, Wall } from "core/types";
+import { CreateWallRequest, SetupWallForm, Wall } from "core/types";
 import { DateTime } from "luxon";
 import { v4 as uuidv4 } from "uuid";
 
@@ -49,6 +49,27 @@ export const createWall = async (
   return {
     id: wallId,
   };
+};
+
+export const setupWall = async (wallId: string, newSetup: SetupWallForm) => {
+  const params = {
+    TableName: String(process.env.tableName),
+    Key: {
+      hk: wallId,
+      sk: "metadata",
+    },
+    UpdateExpression: "set #holdLayout = :holdLayout, #drawing = :drawing",
+    ExpressionAttributeNames: {
+      "#holdLayout": "holdLayout",
+      "#drawing": "drawing",
+    },
+    ExpressionAttributeValues: {
+      ":holdLayout": newSetup.holdLayout,
+      ":drawing": newSetup.drawing
+    },
+  };
+
+  return dynamoDb.update(params).promise();
 };
 
 export const getWall = async (wallId: string): Promise<Wall> => {
@@ -217,4 +238,9 @@ export const decrementRouteCount = (wallId: string) => {
   };
 
   return dynamoDb.update(params).promise();
+};
+
+export const getWallAdminUserId = async (wallId: string) => {
+  const wall = await getWall(wallId);
+  return wall.createdBy;
 };

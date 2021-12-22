@@ -1,3 +1,4 @@
+import React from "react";
 import {
   ChangeEventHandler,
   FocusEventHandler,
@@ -13,6 +14,7 @@ interface InputProps {
   onBlur: FocusEventHandler<HTMLInputElement>;
   error?: string;
   radioOptions: Record<string, string | number>;
+  radioOptionDescriptions?: Record<string, string>;
   name: string;
 }
 
@@ -23,18 +25,23 @@ const Input: FunctionComponent<InputProps> = forwardRef(
         {props.label && <label className="label">{props.label}</label>}
         <div className="control is-expanded">
           {Object.entries(props.radioOptions).map(([key, value]) => (
-            <label className="radio is-capitalized" key={key}>
-              <input
-                type="radio"
-                className="mr-2"
-                name={props.name}
-                value={value}
-                onChange={props.onChange}
-                onBlur={props.onBlur}
-                ref={ref}
-              />
-              {key}
-            </label>
+            <React.Fragment key={key}>
+              <label className="radio is-capitalized">
+                <input
+                  type="radio"
+                  className="mr-2"
+                  name={props.name}
+                  value={value}
+                  onChange={props.onChange}
+                  onBlur={props.onBlur}
+                  ref={ref}
+                />
+                {key}
+              </label>
+              {props.radioOptionDescriptions?.[key] && (
+                <p className="help">{props.radioOptionDescriptions[key]}</p>
+              )}
+            </React.Fragment>
           ))}
         </div>
         <p className="help is-danger">{props.error}</p>

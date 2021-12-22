@@ -15,6 +15,7 @@ import Wall from "./pages/Wall";
 import RouteView from "./pages/Route";
 import CreateRoute from "./pages/CreateRoute";
 import AddRouteToLog from "./pages/AddRouteToLog";
+import SetupWall from "./pages/SetupWall";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -74,6 +75,9 @@ function App() {
             </AuthenticatedRoute>
             <AuthenticatedRoute exact path="/wall/:wallId/create-route">
               <CreateRoute />
+            </AuthenticatedRoute>
+            <AuthenticatedRoute exact path="/wall/:wallId/setup">
+              <SetupWall />
             </AuthenticatedRoute>
             <AuthenticatedRoute exact path="/profile">
               <Profile />

@@ -1,29 +1,29 @@
 import { Storage } from "aws-amplify";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { grades } from "core/globals";
-import { NewRouteFormSchema, yup } from "core/schemas";
-import { CreateRouteForm } from "core/types";
+import { NewRouteFormSchema } from "core/schemas";
+import { CreateRouteForm, Hold, WallDrawing } from "core/types";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useHistory, useParams } from "react-router-dom";
 import { createRoute } from "../api/route";
 import { getWall } from "../api/wall";
 import Button, { ButtonType, Color } from "../elements/Button";
-import Form, {AutoComplete} from "../elements/Form";
+import Form, { AutoComplete } from "../elements/Form";
 import Input from "../elements/Input";
 import Select from "../elements/Select";
 import TextArea from "../elements/TextArea";
 import { popupError, popupSuccess } from "../helpers/alerts";
 
 import "./CreateRoute.css";
-import { domToSvgPoint } from "../helpers/svg";
 
 const CreateRoute = () => {
   const history = useHistory();
   const { wallId } = useParams<{ wallId: string }>();
   const [loading, setLoading] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string>();
-  const [points, setPoints] = useState<[number, number][]>([]);
+  const [wallDrawing, setWallDrawing] = useState<WallDrawing>();
+  const [selectedHolds, setSelectedHolds] = useState<Hold[]>([]);
 
   const {
     register,
@@ -40,6 +40,7 @@ const CreateRoute = () => {
         const { wall } = await getWall(wallId);
         const url = await Storage.get(wall.imageKey);
         setImageUrl(url);
+        setWallDrawing(wall.drawing);
       } catch (error) {
         console.error("Error loading wall", error);
         popupError("Somethings gone wrong, try again");
@@ -64,50 +65,78 @@ const CreateRoute = () => {
   };
 
   const clearPoints = () => {
-    const newPoints: [number, number][] = [];
-    setPoints(newPoints);
+    setSelectedHolds([]);
   };
 
-  const canvasOnPointerUp = ({ clientX, clientY }: PointerEvent) => {
-    const canvasElement = document.querySelector("svg");
-
-    if (!canvasElement) {
-      throw new Error("Error: Canvas Element is Not on Page");
+  const holdOnPointerUp = (holdId: string) => {
+    if (selectedHolds.find(({ id }) => id === holdId)) {
+      console.log("deselecting");
+      deselectHold(holdId);
+    } else {
+      console.log("selecting");
+      selectHold(holdId);
     }
+  };
 
-    if (loading) {
-      return;
-    }
+  const deselectHold = (holdId: string) => {
+    const newSelectedHolds = selectedHolds.reduce((acc: Hold[], cur: Hold) => {
+      if (cur.id === holdId) {
+        return acc;
+      }
 
-    const { x, y } = domToSvgPoint({ clientX, clientY }, canvasElement);
+      return [...acc, cur];
+    }, []);
 
-    const newPoints: [number, number][] = [
-      ...points,
-      [parseFloat(x.toFixed(2)), parseFloat(y.toFixed(2))],
-    ];
-    setPoints(newPoints);
+    setSelectedHolds(newSelectedHolds);
     setValue("drawing", {
-      schemaVersion: 1,
-      points: newPoints,
+      schemaVersion: 2,
+      holds: newSelectedHolds,
     });
   };
 
-  const drawPoints = () => {
-    return points.map(([x, y], index, arr) => (
-      <ellipse
-        key={index}
-        cx={x}
-        cy={y}
-        rx="14"
-        ry="14"
+  const selectHold = (holdId: string) => {
+    const hold = wallDrawing?.holds.find(({ id }) => id === holdId);
+
+    if (!hold) {
+      console.log("Hold %s not found", holdId);
+      return;
+    }
+
+    const newSelectedHolds = [...selectedHolds, hold];
+
+    setSelectedHolds(newSelectedHolds);
+    setValue("drawing", {
+      schemaVersion: 2,
+      holds: newSelectedHolds,
+    });
+  };
+
+  const drawWallHolds = () => {
+    return wallDrawing?.holds.map((hold) => (
+      <path
+        d={hold.points.reduce(
+          (acc, [x, y], index) => `${acc} ${index === 0 ? "M" : "L"} ${x} ${y}`,
+          ""
+        )}
+        strokeWidth="2"
+        stroke="white"
         fill="transparent"
+        onPointerUp={() => holdOnPointerUp(hold.id)}
+      />
+    ));
+  };
+
+  const drawSelectedHolds = () => {
+    return selectedHolds.map((hold) => (
+      <path
+        d={hold.points.reduce(
+          (acc, [x, y], index) => `${acc} ${index === 0 ? "M" : "L"} ${x} ${y}`,
+          ""
+        )}
+        strokeWidth="2"
         stroke="yellow"
-        strokeWidth="4"
-        style={{
-          ...((index as number) === arr.length - 1 && {
-            pointerEvents: "none",
-          }),
-        }}
+        fill="transparent"
+        onPointerUp={() => holdOnPointerUp(hold.id)}
       />
     ));
   };
@@ -126,11 +155,9 @@ const CreateRoute = () => {
               width="100%"
               height="100%"
               viewBox="0 0 1000 1000"
-              onPointerUp={(event) =>
-                canvasOnPointerUp(event as unknown as PointerEvent)
-              }
             >
-              {drawPoints()}
+              {drawWallHolds()}
+              {drawSelectedHolds()}
             </svg>
           </div>
         </div>
@@ -139,7 +166,10 @@ const CreateRoute = () => {
         </Button>
         <hr />
         <h1 className="title">Route Details</h1>
-        <Form onSubmit={handleSubmit(formOnSubmit)} autoComplete={ AutoComplete.off }>
+        <Form
+          onSubmit={handleSubmit(formOnSubmit)}
+          autoComplete={AutoComplete.off}
+        >
           <Input
             label="Title"
             {...register("title")}

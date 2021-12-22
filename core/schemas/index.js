@@ -1,21 +1,75 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LogRouteSchema = exports.NewRouteFormSchema = exports.yup = void 0;
-const yup = require("yup");
+exports.__esModule = true;
+exports.LogRouteSchema = exports.SetupWallFormSchema = exports.SetupWallFormDrawing = exports.SetupWallFormHoldLayoutSchema = exports.SetupWallFormHoldLayout = exports.NewRouteFormSchema = exports.DrawingSchemaVersions = exports.yup = void 0;
+var yup = require("yup");
+var globals_1 = require("../globals");
 exports.yup = require("yup");
+exports.DrawingSchemaVersions = yup
+    .number()
+    .required("Required")
+    .min(1)
+    .max(globals_1.DrawingSchemaVersion);
 exports.NewRouteFormSchema = yup
     .object({
     title: yup.string().required("Required"),
     description: yup.string(),
-    grade: yup.string().required("Required"),
+    grade: yup.string().oneOf(globals_1.grades).required("Required"),
     drawing: yup
         .object()
         .shape({
-        schemaVersion: yup.number().required("Required").oneOf([1]),
-        points: yup.array().of(yup.array().of(yup.number()).length(2)),
+        schemaVersion: exports.DrawingSchemaVersions,
+        holds: yup.array().of(yup.object().shape({
+            id: yup.string().required().length(21),
+            mirrors: yup.string().length(21),
+            points: yup
+                .array()
+                .of(yup.array().of(yup.number().required()).length(2))
+        })
+            .required()
+            .noUnknown())
     })
         .required()
-        .noUnknown(),
+        .noUnknown()
+})
+    .required()
+    .noUnknown();
+exports.SetupWallFormHoldLayout = yup
+    .string()
+    .oneOf(globals_1.holdLayouts.map(function (_a) {
+    var name = _a.name;
+    return name;
+}))
+    .required("Required");
+exports.SetupWallFormHoldLayoutSchema = yup
+    .object()
+    .shape({
+    holdLayout: exports.SetupWallFormHoldLayout
+})
+    .required()
+    .noUnknown();
+exports.SetupWallFormDrawing = yup
+    .object()
+    .shape({
+    schemaVersion: yup
+        .number()
+        .required("Required")
+        .oneOf([globals_1.DrawingSchemaVersion]),
+    holds: yup.array().of(yup.object().shape({
+        id: yup.string().required().length(21),
+        mirrors: yup.string().length(21),
+        points: yup
+            .array()
+            .of(yup.array().of(yup.number().required()).length(2))
+    })
+        .required()
+        .noUnknown())
+})
+    .required()
+    .noUnknown();
+exports.SetupWallFormSchema = yup
+    .object({
+    holdLayout: exports.SetupWallFormHoldLayout,
+    drawing: exports.SetupWallFormDrawing
 })
     .required()
     .noUnknown();
@@ -23,8 +77,7 @@ exports.LogRouteSchema = yup
     .object({
     rating: yup.number().min(0).max(3).required("Required"),
     comments: yup.string(),
-    suggestedGrade: yup.string().required("Required"),
+    suggestedGrade: yup.string().oneOf(globals_1.grades).required("Required")
 })
     .required()
     .noUnknown();
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSwyQkFBMkI7QUFFM0IsNkJBQTJCO0FBRWQsUUFBQSxrQkFBa0IsR0FBRyxHQUFHO0tBQ2xDLE1BQU0sQ0FBQztJQUNOLEtBQUssRUFBRSxHQUFHLENBQUMsTUFBTSxFQUFFLENBQUMsUUFBUSxDQUFDLFVBQVUsQ0FBQztJQUN4QyxXQUFXLEVBQUUsR0FBRyxDQUFDLE1BQU0sRUFBRTtJQUN6QixLQUFLLEVBQUUsR0FBRyxDQUFDLE1BQU0sRUFBRSxDQUFDLFFBQVEsQ0FBQyxVQUFVLENBQUM7SUFDeEMsT0FBTyxFQUFFLEdBQUc7U0FDVCxNQUFNLEVBQUU7U0FDUixLQUFLLENBQUM7UUFDTCxhQUFhLEVBQUUsR0FBRyxDQUFDLE1BQU0sRUFBRSxDQUFDLFFBQVEsQ0FBQyxVQUFVLENBQUMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQztRQUMzRCxNQUFNLEVBQUUsR0FBRyxDQUFDLEtBQUssRUFBRSxDQUFDLEVBQUUsQ0FBQyxHQUFHLENBQUMsS0FBSyxFQUFFLENBQUMsRUFBRSxDQUFDLEdBQUcsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUMsQ0FBQztLQUMvRCxDQUFDO1NBQ0QsUUFBUSxFQUFFO1NBQ1YsU0FBUyxFQUFFO0NBQ2YsQ0FBQztLQUNELFFBQVEsRUFBRTtLQUNWLFNBQVMsRUFBRSxDQUFDO0FBRUYsUUFBQSxjQUFjLEdBQUcsR0FBRztLQUM5QixNQUFNLENBQUM7SUFDTixNQUFNLEVBQUUsR0FBRyxDQUFDLE1BQU0sRUFBRSxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMsUUFBUSxDQUFDLFVBQVUsQ0FBQztJQUN2RCxRQUFRLEVBQUUsR0FBRyxDQUFDLE1BQU0sRUFBRTtJQUN0QixjQUFjLEVBQUUsR0FBRyxDQUFDLE1BQU0sRUFBRSxDQUFDLFFBQVEsQ0FBQyxVQUFVLENBQUM7Q0FDbEQsQ0FBQztLQUNELFFBQVEsRUFBRTtLQUNWLFNBQVMsRUFBRSxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0ICogYXMgeXVwIGZyb20gXCJ5dXBcIjtcblxuZXhwb3J0ICogYXMgeXVwIGZyb20gXCJ5dXBcIjtcblxuZXhwb3J0IGNvbnN0IE5ld1JvdXRlRm9ybVNjaGVtYSA9IHl1cFxuICAub2JqZWN0KHtcbiAgICB0aXRsZTogeXVwLnN0cmluZygpLnJlcXVpcmVkKFwiUmVxdWlyZWRcIiksXG4gICAgZGVzY3JpcHRpb246IHl1cC5zdHJpbmcoKSxcbiAgICBncmFkZTogeXVwLnN0cmluZygpLnJlcXVpcmVkKFwiUmVxdWlyZWRcIiksXG4gICAgZHJhd2luZzogeXVwXG4gICAgICAub2JqZWN0KClcbiAgICAgIC5zaGFwZSh7XG4gICAgICAgIHNjaGVtYVZlcnNpb246IHl1cC5udW1iZXIoKS5yZXF1aXJlZChcIlJlcXVpcmVkXCIpLm9uZU9mKFsxXSksXG4gICAgICAgIHBvaW50czogeXVwLmFycmF5KCkub2YoeXVwLmFycmF5KCkub2YoeXVwLm51bWJlcigpKS5sZW5ndGgoMikpLFxuICAgICAgfSlcbiAgICAgIC5yZXF1aXJlZCgpXG4gICAgICAubm9Vbmtub3duKCksXG4gIH0pXG4gIC5yZXF1aXJlZCgpXG4gIC5ub1Vua25vd24oKTtcblxuZXhwb3J0IGNvbnN0IExvZ1JvdXRlU2NoZW1hID0geXVwXG4gIC5vYmplY3Qoe1xuICAgIHJhdGluZzogeXVwLm51bWJlcigpLm1pbigwKS5tYXgoMykucmVxdWlyZWQoXCJSZXF1aXJlZFwiKSxcbiAgICBjb21tZW50czogeXVwLnN0cmluZygpLFxuICAgIHN1Z2dlc3RlZEdyYWRlOiB5dXAuc3RyaW5nKCkucmVxdWlyZWQoXCJSZXF1aXJlZFwiKSxcbiAgfSlcbiAgLnJlcXVpcmVkKClcbiAgLm5vVW5rbm93bigpO1xuIl19
