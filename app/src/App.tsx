@@ -16,6 +16,7 @@ import RouteView from "./pages/Route";
 import CreateRoute from "./pages/CreateRoute";
 import AddRouteToLog from "./pages/AddRouteToLog";
 import SetupWall from "./pages/SetupWall";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -60,6 +61,9 @@ function App() {
             </UnauthenticatedRoute>
             <UnauthenticatedRoute exact path="/signup-confirm">
               <SignupConfirm />
+            </UnauthenticatedRoute>
+            <UnauthenticatedRoute exact path="/reset-password">
+              <ResetPassword />
             </UnauthenticatedRoute>
             <AuthenticatedRoute exact path="/create-wall">
               <CreateWall />

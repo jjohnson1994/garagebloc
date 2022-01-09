@@ -9,6 +9,7 @@ import { popupError } from "../helpers/alerts";
 import WallTitleTags from "../components/WallTitleTags";
 import Button from "../elements/Button";
 import Box from "../elements/Box";
+import RouteDrawing from "../components/RouteDrawing";
 
 const WallView = () => {
   const { wallId } = useParams<{ wallId: string }>();
@@ -83,6 +84,12 @@ const WallView = () => {
                 key={route.routeId}
               >
                 <Box>
+                  { imageUrl && (
+                    <RouteDrawing
+                      backgroundImageUrl={imageUrl}
+                      drawing={route.drawing}
+                    />
+                  )}
                   <p className="subtitle is-5">
                     <strong>{route.title}</strong>
                   </p>

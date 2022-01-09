@@ -7,7 +7,7 @@ import { yup } from "core/schemas";
 import { popupError } from "../helpers/alerts";
 import { Auth } from "aws-amplify";
 import { useAppContext } from "../context/appContext";
-import { useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 export interface LoginForm {
@@ -85,7 +85,8 @@ const Login = () => {
           >
             Login
           </Button>
-        </Form>
+      </Form>
+      <Link to="/reset-password">Forgot Password?</Link>
       </div>
     </section>
   );

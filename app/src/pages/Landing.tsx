@@ -11,7 +11,12 @@ const Landing = () => {
         <div className="container">
           <h1 className="title">{ appTitle }</h1>
           <p className="subtitle">The app for logging board climbs</p>
-
+            <div className="columns">
+              <div className="column">
+                <img src="exampleboard.png" alt="example board"/>
+              </div>
+              <div className="column"></div>
+            </div>
         </div>
       </section>
     </>
