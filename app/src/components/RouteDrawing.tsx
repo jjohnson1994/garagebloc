@@ -2,9 +2,14 @@ import { Route } from "core/types";
 
 interface Props extends Pick<Route, "drawing"> {
   backgroundImageUrl: string;
+  holdHighlightStroke?: number;
 }
 
-const RouteDrawing: React.FC<Props> = ({ backgroundImageUrl, drawing }) => {
+const RouteDrawing: React.FC<Props> = ({
+  backgroundImageUrl,
+  drawing,
+  holdHighlightStroke,
+}) => {
   const drawHolds = () => {
     return drawing.holds.map((hold) => (
       <path
@@ -12,7 +17,7 @@ const RouteDrawing: React.FC<Props> = ({ backgroundImageUrl, drawing }) => {
           (acc, [x, y], index) => `${acc} ${index === 0 ? "M" : "L"} ${x} ${y}`,
           ""
         )}
-        strokeWidth="2"
+        strokeWidth={holdHighlightStroke ? holdHighlightStroke : 2}
         stroke="yellow"
         fill="transparent"
       />

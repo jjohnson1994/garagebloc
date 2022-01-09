@@ -84,25 +84,36 @@ const WallView = () => {
                 key={route.routeId}
               >
                 <Box>
-                  { imageUrl && (
-                    <RouteDrawing
-                      backgroundImageUrl={imageUrl}
-                      drawing={route.drawing}
-                    />
-                  )}
-                  <p className="subtitle is-5">
-                    <strong>{route.title}</strong>
-                  </p>
-                  <div className="tags">
-                    {route.userLogs.length > 0 && (
-                      <div className="tag is-success">
-                        <i className="fas fa-check mr-1" />
-                        Done
+                  <article className="media">
+                    <div className="media-left">
+                      { imageUrl && (
+                        <figure className="image is-128x128">
+                          <RouteDrawing
+                            backgroundImageUrl={imageUrl}
+                            drawing={route.drawing}
+                            holdHighlightStroke={12}
+                          />
+                        </figure>
+                      )}
+                    </div>
+                    <div className="media-content">
+                      <div className="content">
+                        <p className="subtitle is-5">
+                          <strong>{route.title}</strong>
+                        </p>
                       </div>
-                    )}
-                    <div className="tag">Grade {route.grade}</div>
-                    <div className="tag">Logs {route.logCount}</div>
-                  </div>
+                      <div className="tags">
+                        {route.userLogs.length > 0 && (
+                          <div className="tag is-success">
+                            <i className="fas fa-check mr-1" />
+                            Done
+                          </div>
+                        )}
+                        <div className="tag">Grade {route.grade}</div>
+                        <div className="tag">Logs {route.logCount}</div>
+                      </div>
+                    </div>
+                  </article>
                 </Box>
                 <span className="mb-2"></span>
               </Link>
