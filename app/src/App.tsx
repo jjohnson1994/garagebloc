@@ -16,7 +16,7 @@ import RouteView from "./pages/Route";
 import CreateRoute from "./pages/CreateRoute";
 import AddRouteToLog from "./pages/AddRouteToLog";
 import SetupWall from "./pages/SetupWall";
-import ResetPassword from "./pages/ResetPassword";
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -33,7 +33,7 @@ function App() {
     } catch (error) {
       if (error !== "No current user") {
         console.error(error)
-        alert(error);
+        // alert(error);
       }
     }
 

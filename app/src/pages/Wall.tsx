@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEventHandler, FormEvent } from "react";
 import { Storage } from "aws-amplify";
 import { Wall, Route } from "core/types";
 import { Link, useParams } from "react-router-dom";
@@ -10,6 +10,8 @@ import WallTitleTags from "../components/WallTitleTags";
 import Button from "../elements/Button";
 import Box from "../elements/Box";
 import RouteDrawing from "../components/RouteDrawing";
+import Form, { AutoComplete } from "../elements/Form";
+import Range from "../elements/Range";
 
 const WallView = () => {
   const { wallId } = useParams<{ wallId: string }>();
@@ -17,6 +19,16 @@ const WallView = () => {
   const [routes, setRoutes] = useState<Route[]>([]);
   const [imageUrl, setImageUrl] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [filters, setFilters] = useState<
+    Record<string, (route: Route) => boolean>
+  >({});
+  const [minGradeFilterValue, setMinGradeFilterValue] =
+    useState<number>(0);
+  const [maxGradeFilterValue, setMaxGradeFilterValue] =
+    useState<number>(0);
+  const [routeGradeRange, setRouteGradeRange] = useState<Record<number, string>>(
+    {}
+  );
 
   useEffect(() => {
     const doGetWall = async () => {
@@ -29,6 +41,27 @@ const WallView = () => {
 
         const { routes } = await getRoutes(wallId);
         setRoutes(routes);
+
+        const routeGradeRange = routes
+          .map((route) => route.grade)
+          .sort()
+          .reduce((acc: string[], cur: string) => {
+            if (Object.values(acc).includes(cur)) {
+              return acc;
+            }
+
+            return [...acc, cur];
+          }, [])
+          .reduce((acc, cur, index) => {
+            return {
+              ...acc,
+              [index]: cur,
+            };
+          }, {});
+
+        setRouteGradeRange(routeGradeRange);
+        setMaxGradeFilterValue(Object.values(routeGradeRange).length - 1)
+        console.log(routeGradeRange);
       } catch (error) {
         console.error("Error loading wall", error);
         popupError("Somethings gone wrong, try again");
@@ -39,6 +72,40 @@ const WallView = () => {
 
     doGetWall();
   }, [wallId]);
+
+  const getFilteredRoutes = () => {
+    return Object.values(filters).reduce((routes: Route[], filter) => {
+      return routes.filter(filter);
+    }, routes);
+  };
+
+  const setMinGradeFilter = (event: FormEvent<HTMLInputElement>) => {
+    const minGradeIndex = parseInt(event.currentTarget.value, 10);
+    const minGradeString = routeGradeRange[minGradeIndex];
+    const filter = (route: Route) => route.grade >= minGradeString;
+
+    const newFilters = {
+      ...filters,
+      gradesAbove: filter,
+    };
+
+    setMinGradeFilterValue(minGradeIndex);
+    setFilters(newFilters);
+  };
+
+  const setMaxGradeFilter = (event: FormEvent<HTMLInputElement>) => {
+    const maxGradeIndex = parseInt(event.currentTarget.value, 10);
+    const maxGradeString = routeGradeRange[maxGradeIndex];
+    const filter = (route: Route) => route.grade <= maxGradeString;
+
+    const newFilters = {
+      ...filters,
+      gradesBelow: filter,
+    };
+
+    setMaxGradeFilterValue(maxGradeIndex);
+    setFilters(newFilters);
+  };
 
   return (
     <>
@@ -78,7 +145,13 @@ const WallView = () => {
           </div>
           <div className="block container">
             <h1 className="title">Routes</h1>
-            {routes?.map((route) => (
+            <button className="button">
+              <span className="icon is-small">
+                <i className="fas fa-filter"></i>
+              </span>
+              <span>Filter</span>
+            </button>
+            {getFilteredRoutes()?.map((route) => (
               <Link
                 to={`/wall/${wall?.wallId}/route/${route.routeId}`}
                 key={route.routeId}
@@ -86,7 +159,7 @@ const WallView = () => {
                 <Box>
                   <article className="media">
                     <div className="media-left">
-                      { imageUrl && (
+                      {imageUrl && (
                         <figure className="image is-128x128">
                           <RouteDrawing
                             backgroundImageUrl={imageUrl}
@@ -121,6 +194,35 @@ const WallView = () => {
           </div>
         </section>
       )}
+      <div className="modal is-active">
+        <div className="modal-background"></div>
+        <div className="modal-content">
+          <div className="box">
+            <p className="title is-5">Filter Routes</p>
+            <Form autoComplete={AutoComplete.off} onSubmit={() => { }}>
+              <Range
+                label="Minimum Grade"
+                name="filterMinGrade"
+                min={0}
+                max={maxGradeFilterValue}
+                value={minGradeFilterValue}
+                valueLabel={routeGradeRange[minGradeFilterValue]}
+                onChange={setMinGradeFilter}
+              />
+              <Range
+                label="Maximum Grade"
+                name="filterMaxGrade"
+                min={minGradeFilterValue}
+                max={Object.values(routeGradeRange).length - 1}
+                value={maxGradeFilterValue}
+                valueLabel={routeGradeRange[maxGradeFilterValue]}
+                onChange={setMaxGradeFilter}
+              />
+            </Form>
+          </div>
+        </div>
+        <button className="modal-close is-large" aria-label="close"></button>
+      </div>
     </>
   );
 };

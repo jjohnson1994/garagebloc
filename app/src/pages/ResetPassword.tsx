@@ -71,8 +71,6 @@ const ResetPassword = () => {
       await Auth.forgotPassword(value.email);
       setConfirmationCodeSent(true);
     } catch (error: any) {
-      console.log(JSON.stringify(error));
-
       if (error.code === "CodeMismatchException") {
         popupError("Incorrect Confirmation Code, check your code and try again");
       } else {
@@ -97,7 +95,6 @@ const ResetPassword = () => {
       popupSuccess("Password Reset");
       history.replace("/login");
     } catch (error: any) {
-      console.log(JSON.stringify(error));
       popupError("Something has gone wrong, try again");
     } finally {
       setIsLoading(false);

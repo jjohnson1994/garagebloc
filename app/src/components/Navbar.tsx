@@ -1,8 +1,8 @@
-import {useState} from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { appTitle } from "../config.json";
-import {useAppContext} from "../context/appContext";
-import Button, {Color} from "../elements/Button";
+import { useAppContext } from "../context/appContext";
+import Button, { Color } from "../elements/Button";
 
 const NarBar = () => {
   const { isAuthenticated } = useAppContext();
@@ -10,7 +10,7 @@ const NarBar = () => {
 
   const btnBurgerMenuOnClick = () => {
     if (navBarMenuClass === "is-active") {
-      setNavBarMenuClass("");
+      setNavBarMenuClass("")
     } else {
       setNavBarMenuClass("is-active");
     }
@@ -35,7 +35,7 @@ const NarBar = () => {
           aria-label="menu"
           aria-expanded="false"
           data-target="navbarBasicExample"
-          onClick={ btnBurgerMenuOnClick }
+          onClick={btnBurgerMenuOnClick}
         >
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -46,7 +46,7 @@ const NarBar = () => {
       <div
         id="navbarBasicExample"
         className={`navbar-menu ${navBarMenuClass}`}
-        onClick={ btnBurgerMenuOnClick }
+        onClick={btnBurgerMenuOnClick}
       >
         <div className="navbar-end">
           <div className="navbar-item">
@@ -63,7 +63,7 @@ const NarBar = () => {
                 </p>
                 <p className="control">
                   <Link to="/signup">
-                    <Button color={ Color.isPrimary }>Signup</Button>
+                    <Button color={Color.isPrimary}>Signup</Button>
                   </Link>
                 </p>
               </div>

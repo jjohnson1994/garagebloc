@@ -40,7 +40,6 @@ const RouteView = () => {
       try {
         setLoading(true);
         const { route } = await getRoute(routeId);
-        console.log(route)
         setRoute(route);
       } catch (error) {
         console.error("Error loading route", error);

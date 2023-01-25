@@ -37,7 +37,7 @@ const AddRouteToLog = () => {
   const formOnSubmit: SubmitHandler<LogRouteForm> = async (value) => {
     try {
       setLoading(true);
-      await createLog(wallId, routeId, value);
+      await createLog({wallId, routeId, log: value});
       popupSuccess("Logged!");
       history.replace(`/wall/${wallId}/route/${routeId}`);
     } catch (error) {

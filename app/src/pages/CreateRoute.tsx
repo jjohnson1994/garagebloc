@@ -70,10 +70,8 @@ const CreateRoute = () => {
 
   const holdOnPointerUp = (holdId: string) => {
     if (selectedHolds.find(({ id }) => id === holdId)) {
-      console.log("deselecting");
       deselectHold(holdId);
     } else {
-      console.log("selecting");
       selectHold(holdId);
     }
   };
@@ -98,7 +96,6 @@ const CreateRoute = () => {
     const hold = wallDrawing?.holds.find(({ id }) => id === holdId);
 
     if (!hold) {
-      console.log("Hold %s not found", holdId);
       return;
     }
 

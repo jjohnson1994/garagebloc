@@ -9,8 +9,6 @@ export const handler: APIGatewayProxyHandlerV2 = async (
 
   const { wallId } = event.queryStringParameters || {} as any
 
-  console.log(event.queryStringParameters)
-
   try {
     if (wallId) {
       const wall = await getWall(wallId)

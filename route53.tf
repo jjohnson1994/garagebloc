@@ -26,6 +26,17 @@ resource "aws_route53_record" "www-aaaa" {
   }
 }
 
+resource "aws_route53_record" "www-txt" {
+  zone_id = data.aws_route53_zone.garagebloc.zone_id
+  name    = var.domain_name
+  type    = "TXT"
+  ttl     google-site-verification=MVDcBgaJNXJAaXSho2yGzWuieF968NxIScIjZumuIBY= 300
+
+  records = [
+    "google-site-verification=MVDcBgaJNXJAaXSho2yGzWuieF968NxIScIjZumuIBY"
+  ]
+}
+
 resource "aws_route53_record" "cert" {
   for_each = {
     for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.domain_name => {

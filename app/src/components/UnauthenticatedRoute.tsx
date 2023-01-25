@@ -13,10 +13,12 @@ const UnauthenticatedRoute: React.FC<Props> = (props) => {
 
   return (
     <Route {...rest}>
-      {
+      {!isAuthenticated ? (
         // @ts-ignore
-        !isAuthenticated ? cloneElement(children, props) : <Redirect to="/profile" />
-      }
+        cloneElement(children, props)
+      ) : (
+        <Redirect to="/profile" />
+      )}
     </Route>
   );
 };

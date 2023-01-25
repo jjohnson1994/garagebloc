@@ -47,8 +47,6 @@ const Login = () => {
       setIsAuthenticated(true);
       history.replace(path);
     } catch (error: any) {
-      console.log(JSON.stringify(error));
-
       if (error.code === "UserNotConfirmedException") {
         history.replace("/signup-confirm", { email: value.email });
       } else {

@@ -11,15 +11,17 @@ export const createRoute = async (
 export const getRoute = async (routeId: string): Promise<{ route: Route }> => {
   return API.get("super-board", `/routes`, {
     queryStringParameters: {
-      routeId
-    }
+      routeId,
+    },
   });
 };
 
-export const getRoutes = async (wallId: string) => {
+export const getRoutes = async (
+  wallId: string
+): Promise<{ routes: Route[] }> => {
   return API.get("super-board", `/routes`, {
     queryStringParameters: {
-      wallId
-    }
+      wallId,
+    },
   });
 };

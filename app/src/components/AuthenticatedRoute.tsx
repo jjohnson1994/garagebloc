@@ -4,8 +4,8 @@ import { useAppContext } from "../context/appContext";
 import LoadingSpinner from "./LoadingSpinner";
 
 interface Props {
-  exact: boolean
-  path: string
+  exact: boolean;
+  path: string;
 }
 
 const AuthenticatedRoute: React.FC<Props> = ({ children, ...rest }) => {
@@ -14,17 +14,13 @@ const AuthenticatedRoute: React.FC<Props> = ({ children, ...rest }) => {
 
   return (
     <Route {...rest}>
-      {isAuthenticating && (
-        <LoadingSpinner />
-      )}
-      {isAuthenticated && !isAuthenticating && (
-        children
-      )}
+      {isAuthenticating && <LoadingSpinner />}
+      {isAuthenticated && !isAuthenticating && children}
       {!isAuthenticated && !isAuthenticating && (
         <Redirect to={`/login?redirect=${pathname}${search}`} />
       )}
     </Route>
   );
-}
+};
 
-export default AuthenticatedRoute
+export default AuthenticatedRoute;
